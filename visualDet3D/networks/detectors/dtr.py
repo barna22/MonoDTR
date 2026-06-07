@@ -121,6 +121,10 @@ class TransDecoderLayer(nn.Module):
         self.attention1 = LinearAttention()
         self.merge1 = nn.Linear(d_model, d_model, bias=False)
 
+        # gates how much cross-attended image context each depth token absorbs
+        self.gate = nn.Linear(d_model, d_model, bias=True)
+        nn.init.constant_(self.gate.bias, 1.0)  # start mostly open, close to baseline behaviour
+
         # feed-forward network
         self.mlp = nn.Sequential(
             nn.Linear(d_model, d_model*2, bias=False),
@@ -162,8 +166,10 @@ class TransDecoderLayer(nn.Module):
         value = self.v_proj1(value).view(bs, -1, self.nhead, self.dim)
         message = self.attention1(query, key, value)  # [N, L, (H, D)]
         message = self.merge1(message.view(bs, -1, self.nhead*self.dim))  # [N, L, C]
-        
-        x = x + self.drop_path(self.norm1(message))
+
+        # gate the cross-attention message with the current (self-attended) depth features
+        gate = torch.sigmoid(self.gate(x))
+        x = x + self.drop_path(self.norm1(message * gate))
         x = x + self.drop_path(self.norm2(self.mlp(x)))
         
         return x
