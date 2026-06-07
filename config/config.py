@@ -9,7 +9,7 @@ cfg.obj_types = ['Car']
 ## trainer
 trainer = edict(
     gpu = 0,
-    max_epochs = 120,
+    max_epochs = 100,
     disp_iter = 100,
     save_iter = 5,
     test_iter = 10,
@@ -28,7 +28,7 @@ path.visualDet3D_path = "./visualDet3D" # The path should point to the inner sub
 path.project_path = "./workdirs" # or other path for pickle files, checkpoints, tensorboard logging and output files.
 if not os.path.isdir(path.project_path):
     os.mkdir(path.project_path)
-path.project_path = os.path.join(path.project_path, 'MonoDTR')
+path.project_path = os.path.join(path.project_path, 'MonoDTR_mod_2')
 if not os.path.isdir(path.project_path):
     os.mkdir(path.project_path)
 
