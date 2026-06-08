@@ -9,7 +9,7 @@ cfg.obj_types = ['Car']
 ## trainer
 trainer = edict(
     gpu = 0,
-    max_epochs = 100,
+    max_epochs = 60,
     disp_iter = 100,
     save_iter = 5,
     test_iter = 10,
@@ -28,7 +28,7 @@ path.visualDet3D_path = "./visualDet3D" # The path should point to the inner sub
 path.project_path = "./workdirs" # or other path for pickle files, checkpoints, tensorboard logging and output files.
 if not os.path.isdir(path.project_path):
     os.mkdir(path.project_path)
-path.project_path = os.path.join(path.project_path, 'MonoDTR_mod_2')
+path.project_path = os.path.join(path.project_path, 'MonoDTR_mod_2_test2')
 if not os.path.isdir(path.project_path):
     os.mkdir(path.project_path)
 
@@ -36,9 +36,14 @@ path.log_path = os.path.join(path.project_path, "log")
 if not os.path.isdir(path.log_path):
     os.mkdir(path.log_path)
 
-path.checkpoint_path = os.path.join(path.project_path, "checkpoint")
+# Per-epoch checkpoints are large (~200MB each) and the shared /root/workdir
+# disk is full; write them to local container storage instead, then copy the
+# final trained model back to persistent storage (path.final_model_path).
+path.checkpoint_path = os.path.join("/root/tmp_checkpoints", os.path.basename(path.project_path), "checkpoint")
 if not os.path.isdir(path.checkpoint_path):
-    os.mkdir(path.checkpoint_path)
+    os.makedirs(path.checkpoint_path)
+
+path.final_model_path = path.project_path
 
 path.preprocessed_path = os.path.join(path.project_path, "output")
 if not os.path.isdir(path.preprocessed_path):

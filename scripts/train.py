@@ -3,6 +3,7 @@
 """
 import os
 import sys
+import shutil
 import numpy as np
 from easydict import EasyDict
 from tqdm import tqdm
@@ -191,6 +192,15 @@ def main(config="config/config.py", experiment_name="default", world_size=1, loc
 
         if is_logging:
             writer.flush()
+
+    ## Copy the final trained model from local scratch storage to persistent storage
+    if is_logging:
+        final_src = os.path.join(cfg.path.checkpoint_path, '{}_latest.pth'.format(cfg.detector.name))
+        final_model_dir = getattr(cfg.path, 'final_model_path', cfg.path.checkpoint_path)
+        os.makedirs(final_model_dir, exist_ok=True)
+        final_dst = os.path.join(final_model_dir, '{}_final.pth'.format(cfg.detector.name))
+        shutil.copy2(final_src, final_dst)
+        print(f"Copied final model to {final_dst}")
 
 if __name__ == '__main__':
     Fire(main)
