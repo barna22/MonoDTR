@@ -16,6 +16,7 @@ Please refer to [INSTALL.md](INSTALL.md) for installation and to [DATA.md](DATA.
 
 ## Starting a training run with the modified configuration
 
+The code for the baseline solution and the modifications can be accessed by switching to the correct branch in the repository.
 Navigate to the root MonoDTR folder, and activate the Conda environment.
 The Conda environment can be accessed by running the following command:
 ```sh
@@ -26,6 +27,10 @@ Once the conda environment is activated, a training run can be started with the 
  ./launcher/train.sh config/config.py $GPU_NUMBER $EXP_NAME
 ```
 Rerunning an existing experiment will work without any additional setup, however, for new experiments, a depth map precomputation needs to be run as well. Refer to [DATA.md](DATA.md) for instructions.
+An example training command to run an experiment for the baseline solution:
+```sh
+ ./launcher/train.sh config/config.py 0 baseline
+```
 
 ## Train
 
