@@ -14,6 +14,18 @@ The code for the KITTI-360 dataset is now available in the [kitti360 branch](htt
 
 Please refer to [INSTALL.md](INSTALL.md) for installation and to [DATA.md](DATA.md) for data preparation.
 
+## Starting a training run with the modified configuration
+
+Navigate to the root MonoDTR folder, and activate the Conda environment.
+The Conda environment can be accessed by running the following command:
+```sh
+ conda activate monodtr
+```
+Once the conda environment is activated, a training run can be started with the following command (if running in a multi-GPU environment like DGX, please make sure that the selected GPU is not already occuppied):
+```sh
+ ./launcher/train.sh config/config.py $GPU_NUMBER $EXP_NAME
+```
+Rerunning an existing experiment will work without any additional setup, however, for new experiments, a depth map precomputation needs to be run as well. Refer to [DATA.md](DATA.md) for instructions.
 
 ## Train
 
