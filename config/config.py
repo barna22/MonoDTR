@@ -9,7 +9,7 @@ cfg.obj_types = ['Car']
 ## trainer
 trainer = edict(
     gpu = 0,
-    max_epochs = 60,
+    max_epochs = 120,
     disp_iter = 100,
     save_iter = 5,
     test_iter = 10,
